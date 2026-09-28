@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contador Cautelar</title>
+    <style>
+        :root {
+            --color-fondo-pantalla: #1a1a2e;    
+            --color-fondo-tarjeta: #16213e;     
+            --color-fondo-caja-tiempo: #0f3460; 
+            --color-texto-principal: #ffffff;   
+            --color-detalles-y-etiquetas: #e94560; 
+            --color-mensaje-final: #ff2e63;     
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-fondo-pantalla);
+            color: var(--color-texto-principal);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+        }
+
+        .countdown-container {
+            text-align: center;
+            background: var(--color-fondo-tarjeta);
+            padding: 25px 15px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--color-detalles-y-etiquetas);
+            line-height: 1.4;
+            font-weight: bold;
+        }
+
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .time-box {
+            background: var(--color-fondo-caja-tiempo);
+            padding: 12px 2px;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .number {
+            font-size: 1.7rem;
+            font-weight: bold;
+            display: block;
+            color: var(--color-texto-principal);
+        }
+
+        .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--color-detalles-y-etiquetas);
+            margin-top: 4px;
+            display: block;
+        }
+
+        #expired-message {
+            font-size: 1.8rem;
+            color: var(--color-mensaje-final);
+            font-weight: bold;
+            display: none;
+            line-height: 1.4;
+            padding: 20px 10px;
+            border: 2px dashed var(--color-mensaje-final);
+            border-radius: 10px;
+            background: rgba(255, 46, 99, 0.1);
+        }
+
+        @media (max-width: 360px) {
+            h1 { font-size: 1.2rem; }
+            .number { font-size: 1.4rem; }
+            .label { font-size: 0.6rem; }
+            #expired-message { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="countdown-container">
+        <h1 id="title">Galleguito, no seas rebelde. Te queda esto para pagar la cautelar</h1>
+        
+        <div id="countdown" class="countdown">
+            <div class="time-box">
+                <span id="days" class="number">00</span>
+                <span class="label">Días</span>
+            </div>
+            <div class="time-box">
+                <span id="hours" class="number">00</span>
+                <span class="label">Horas</span>
+            </div>
+            <div class="time-box">
+                <span id="minutes" class="number">00</span>
+                <span class="label">Minutos</span>
+            </div>
+            <div class="time-box">
+                <span id="seconds" class="number">00</span>
+                <span class="label">Segundos</span>
+            </div>
+        </div>
+
+        <!-- ✍️ MODIFICÁ ACÁ EL MENSAJE DE EXPIRACIÓN -->
+        <div id="expired-message">REBELDE!<br>Comienzan a ejecutarte</div>
+    </div>
+
+    <script>
+        const targetDate = new Date('2026-09-30T10:00:00').getTime();
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('title').style.display = 'none';
+                document.getElementById('expired-message').style.display = 'block';
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
+    </script>
+
+</body>
+</html>
+
+
